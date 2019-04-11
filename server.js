@@ -6,12 +6,31 @@ const http = require('http');
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
+
+let usersockets = {};
+
 io.on('connection',(socket)=>{
-    socket.emit('connected')
+    socket.emit('connected');
+
+    socket.on('login',(data)=>{
+        //Username is in data.user
+        usersockets[data.user] = socket.id;
+        console.log(usersockets);
+    });
+
     socket.on('send_msg', (data)=>{
         // if we use io.emit(),everyone gets it
         //if we use socket.broadcast.emit(), only others get it
-        socket.broadcast.emit('recv_msg', data)
+        if (data.message.startsWith('@')){
+            //data.message = "@a: hello"
+            //split at :, then remove @ from beginning
+            let recipient = data.message.split(':')[0].substr(1);
+            let rcptsocket = usersockets[recipient];
+            io.to(rcptsocket).emit('recv_msg', data)
+        }
+        else{
+            socket.broadcast.emit('recv_msg', data)
+        }
     })
 });
 
