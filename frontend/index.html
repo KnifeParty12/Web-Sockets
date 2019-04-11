@@ -9,11 +9,16 @@
 </head>
 <body>
 <h1>Socket.IO Example</h1>
-<input type="text" id="msgbox">
-<button id="sendmsg"> SEND </button>
-<ul id="msglist">
+<div id="login-div">
+    <input type="text" placeholder="Username" id="loginbox">
+    <button id="loginbtn"> LOGIN </button>
+</div>
+<div id="chat-div" style="display: none">
+    <input type="text" placeholder="New Message" id="msgbox">
+    <button id="sendmsg"> SEND </button>
+    <ul id="msglist"></ul>
+</div>
 
-</ul>
 
 </body>
 </html>
